@@ -18,7 +18,7 @@ public class GoogleSignInController {
 	@RequestMapping("/OAuth2Callback")
 	public String callback(@RequestParam String code) {
 		if (StringUtils.isNotBlank(code)) {
-			return "redirect:dashboard.html";
+			return "redirect:product.html";
 		}
 		return "redirecting code value is not authenticated";
 	}
