@@ -1,0 +1,162 @@
+<html lang="en" ng-app="newproduct">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add New product</title>
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/app.css" />
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+</head>
+<body>
+	<div ng-controller="productcontroller">
+		<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Add
+			new product</h3>
+		<form class="form-horizontal" role="form">
+			<div class="form-group">
+				<label for="productId" class="col-sm-2 control-label">ProductId</label>
+				<div class="col-sm-4">
+					<input class="form-control" id="productId" placeholder="Product Id"
+						ng-model="product_id">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="supplier" class="col-sm-2 control-label">Supplier</label>
+				<div class="col-sm-4">
+					<!--           <input class="form-control" id="inputPassword3" placeholder="Category"> -->
+					<select class="form-control" name="singleSelect" id="supplier"
+						ng-model="supplier">
+						<option value="option-1">Select</option>
+						<option value="option-2">Gap</option>
+						<option value="option-2">Adidas</option>
+						<option value="option-2">Peterengland</option>
+						<option value="option-2">Thomson</option>
+					</select><br>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="productName" class="col-sm-2 control-label">Product
+					Name</label>
+				<div class="col-sm-4">
+					<input class="form-control" id="productName"
+						placeholder="Product Name" ng-model="product_name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="category" class="col-sm-2 control-label">Category</label>
+				<div class="col-sm-4">
+					<!--           <input class="form-control" id="inputPassword3" placeholder="Category"> -->
+					<select class="form-control" name="singleSelect" id="category"
+						ng-model="category">
+						<option value="option-1">Select</option>
+						<option value="option-2">Clothes</option>
+						<option value="option-2">Mobile</option>
+						<option value="option-2">Furniture</option>
+						<option value="option-2">Electrical</option>
+					</select><br>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="productInformation" class="col-sm-2 control-label">Product
+					Information</label>
+				<div class="col-sm-4">
+					<input class="form-control" id="productInformation"
+						placeholder="Product Information" ng-model="product_info">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="quantity" class="col-sm-2 control-label">Quantity</label>
+				<div class="col-sm-4">
+					<input class="form-control" id="quantity" placeholder="Quantity"
+						ng-model="quantity">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="price" class="col-sm-2 control-label">Price</label>
+				<div class="col-sm-4">
+					<input class="form-control" id="price" placeholder="Price"
+						ng-model="price">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-success" ng-click="postData()">Add</button>
+				</div>
+			</div>
+		</form>
+
+	</div>
+
+	<!-- <script>
+		var app = angular.module('newproduct', []);
+		app.controller('productcontroller', function($scope, $http) {
+			$scope.postData = function () {
+				alert("inside the post data funcitn");
+				alert("product_id:"+$scope.product_id);
+			    var request = $http({
+			        method: "post",
+			        url: "http://localhost:8080/product/create",
+			        data: {
+			        	productId: $scope.product_id,
+			        	supplier: $scope.supplier,
+			        	productName: $scope.product_name,
+			        	category: $scope.category,
+			        	productInformation: $scope.product_info,
+			        	quantity: $scope.quantity,
+			            price: $scope.price,
+			        },
+			        headers: { 'Content-Type': 'application/json' }
+			    }).then(function mySucces(response) {
+			    	alert("inside success funciton");
+			        $scope.successResponse = response.data;
+			    }, function myError(response) {
+			    	alert("inside error funciton");
+			        $scope.errorMessage = response.statusText;
+			    });;
+			 }
+			
+			
+		});
+	</script> -->
+
+	<script>
+		var app = angular.module('newproduct', []);
+		app.controller('productcontroller', function($scope, $http) {
+			
+			$scope.productdata= {
+	        	productId: $scope.product_id,
+	        	supplier: $scope.supplier,
+	        	productName: $scope.product_name,
+	        	category: $scope.category,
+	        	productInformation: $scope.product_info,
+	        	quantity: $scope.quantity,
+	            price: $scope.price,
+	        }
+			
+			$scope.postData = function () {
+				
+		$http.post("http://localhost:8080/product/create",$scope.productdata)
+		.success(function(response)
+				{
+				alert("inside success::"+.stringify(response));
+			//$scope.usersData=responce.users;$scope.message=response.message;
+				})
+			
+		.error(function(response){
+			
+		alert("inside error function");
+			});
+		
+		}
+		
+	});
+	</script>
+</body>
+
+
+
+</html>

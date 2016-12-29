@@ -13,7 +13,7 @@ public class Product {
 	private Category category;
 	private String productInformation;
 	private Integer quantity;
-	private Integer ppi;
+	private Integer price;
 
 	public String getProductId() {
 		return productId;
@@ -63,11 +63,13 @@ public class Product {
 		this.quantity = quantity;
 	}
 
-	public Integer getPpi() {
-		return ppi;
+	public Integer getPrice() {
+		return price;
 	}
 
-	public void setPpi(Integer ppi) {
-		this.ppi = ppi;
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
+
+	
 }
