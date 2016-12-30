@@ -7,27 +7,27 @@ import org.springframework.stereotype.Component;
 public class Product {
 
 	@Id
-	private String productId;
-	private Supplier supplier;
+	private Integer productId;
+	private String supplier;
 	private String productName;
-	private Category category;
+	private String category;
 	private String productInformation;
 	private Integer quantity;
 	private Integer price;
 
-	public String getProductId() {
+	public Integer getProductId() {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
+	public void setProductId(Integer productId) {
 		this.productId = productId;
 	}
 
-	public Supplier getSupplier() {
+	public String getSupplier() {
 		return supplier;
 	}
 
-	public void setSupplier(Supplier supplier) {
+	public void setSupplier(String supplier) {
 		this.supplier = supplier;
 	}
 
@@ -39,11 +39,11 @@ public class Product {
 		this.productName = productName;
 	}
 
-	public Category getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 
@@ -71,5 +71,4 @@ public class Product {
 		this.price = price;
 	}
 
-	
 }
