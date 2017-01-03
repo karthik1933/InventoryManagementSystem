@@ -7,6 +7,8 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" />
 <!-- Latest compiled JavaScript -->
 <script
+	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
@@ -16,19 +18,33 @@ angular.module('productervice',[]).factory('productFactory',function($http){
 		createProduct: function(product){
 			$http.post('/product/create', product)
 			.then(function(data){
-				alert("created")
+				//alert("created")
 			})
 			.catch(function(data){
-				alert("not Created")
+				//alert("not Created")
 			});
 		},
 	}
 });
 var app = angular.module("myApp", [ 'productervice' ]);
 app.controller('myCtrl',function($scope, $http, productFactory) {
-					$scope.createProduct = function(product){
-						productFactory.createProduct(product);
-					}
+	
+					//for validating the form before submitting
+					$scope.onlyNumbers = /^[1-9]+[0-9]*$/;
+					$scope.submitForm = function(isValid,product) {
+				    if (isValid) {
+					  productFactory.createProduct(product);
+				      alert('Procuct has been created');
+				      $scope.reset();
+				     
+				    }
+					};
+					
+					$scope.reset = function() {
+					      $scope.product = {};
+					      $scope.productForm.$setPristine();
+					    }
+					
 				});
  </script>
 </head>
@@ -37,19 +53,25 @@ app.controller('myCtrl',function($scope, $http, productFactory) {
 		<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Add
 			new product</h3>
-		<form class="form-horizontal" role="form">
+		<form class="form-horizontal" role="form" name="productForm" ng-submit="submitForm(productForm.$valid,product)" novalidate  >
 			<div class="form-group">
 				<label for="productId" class="col-sm-2 control-label">ProductId</label>
 				<div class="col-sm-4">
-					<input class="form-control" placeholder="Product Id"
-						ng-model="product.productId">
+					<input class="form-control"  name="productId" placeholder="Product Id"
+						ng-pattern="onlyNumbers" ng-model="product.productId"  type="number"  required>
+						<span ng-show="(productForm.productId.$dirty || !productForm.productId.length || isValid) && productForm.productId.$error.required">
+     						 Product ID is required
+    					</span>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="supplier" class="col-sm-2 control-label">Supplier</label>
 				<div class="col-sm-4">
-					<input class="form-control" placeholder="supplier"
-						ng-model="product.supplier">
+					<input class="form-control" placeholder="supplier" name="supplier"
+						ng-model="product.supplier" required>
+						<span ng-show="(productForm.supplier.$dirty || !productForm.supplier.length || isValid) && productForm.supplier.$error.required">
+     						 Supplier Name is required
+    					</span>
 				</div>
 
 			</div>
@@ -57,15 +79,21 @@ app.controller('myCtrl',function($scope, $http, productFactory) {
 				<label for="productName" class="col-sm-2 control-label">Product
 					Name</label>
 				<div class="col-sm-4">
-					<input class="form-control" placeholder="Product Name"
-						ng-model="product.productName">
+					<input class="form-control" placeholder="Product Name" name="productName"
+						ng-model="product.productName" required>
+						<span ng-show="(productForm.productName.$dirty || !productForm.productName.length || isValid) && productForm.productName.$error.required">
+     						 Product Name is required
+    					</span>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="category" class="col-sm-2 control-label">Category</label>
 				<div class="col-sm-4">
-					<input class="form-control" placeholder="category"
-						ng-model="product.category">
+					<input class="form-control" placeholder="category" name="category"
+						ng-model="product.category" required>
+						<span ng-show="(productForm.category.$dirty || !productForm.category.length || isValid) && productForm.category.$error.required">
+     						 Category Name is required
+    					</span>
 				</div>
 			</div>
 			<div class="form-group">
@@ -79,19 +107,29 @@ app.controller('myCtrl',function($scope, $http, productFactory) {
 			<div class="form-group">
 				<label for="quantity" class="col-sm-2 control-label">Quantity</label>
 				<div class="col-sm-4">
-					<input class="form-control" placeholder="Quantity"
-						ng-model="product.quantity">
+					<input class="form-control" placeholder="Quantity" name="quantity"
+						ng-model="product.quantity"  type="number" required>
+						<span ng-show="(productForm.quantity.$dirty || !productForm.quantity.length || isValid) && productForm.quantity.$error.required">
+     						 Quantity  is required
+    					</span>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="price" class="col-sm-2 control-label">Price</label>
 				<div class="col-sm-4">
-					<input class="form-control" placeholder="Price"
-						ng-model="product.price">
+					<input class="form-control" placeholder="Price" name="price"
+						ng-model="product.price"  type="number" required>
+						<span ng-show="(productForm.price.$dirty || !productForm.price.length || isValid) && productForm.price.$error.required">
+     						 Price  is required
+    					</span>
 				</div>
 			</div>
 			<div class="controls">
-				<button class="btn btn-success" ng-click="createProduct(product)">Register</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-success" type="submit">Add</button>
+
 			</div>
 		</form>
 	</div>
