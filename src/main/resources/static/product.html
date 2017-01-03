@@ -34,19 +34,33 @@ table tr:nth-child(odd) {
 table tr:nth-child(even) {
 	background-color: #ffffff;
 }
+
+select {
+	text-indent: 5px;
+	text-align: center;
+}
 </style>
 </head>
 <body>
 	<div ng-app="myApp" ng-controller="productController">
 		<br>
-		<button type="button" class="btn btn-primary" ng-click="addProduct()">Add
-			New Product</button>
-		<button type="button" class="btn btn-info">Info</button>
-
-		<br> <br>
-		<table style="border-color: #efeded">
+		<button type="button" class="btn btn-primary center-block"
+			ng-click="addProduct()">Add New Product</button>
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select
+		Sort Option Field: <select ng-model="X" class="day">
+			<option>productId</option>
+			<option>supplier</option>
+			<option>productName</option>
+			<option>category</option>
+			<option>productInformation</option>
+			<option>quantity</option>
+			<option>price</option>
+		</select><br> <br>
+		<table align="center" style="border-color: #efeded">
 			<tr>
-				<th></th>
+				<th>S.NO</th>
 				<th>PRODUCTID</th>
 				<th>SUPPLIER</th>
 				<th>PRODUCTNAME</th>
@@ -56,28 +70,72 @@ table tr:nth-child(even) {
 				<th>PRICE</th>
 				<th>ACTION</th>
 			</tr>
-			<tr ng-repeat="item in products">
+			<tr ng-repeat="item in products | orderBy:X">
 				<td><input type="checkbox" value="" ng-model="item.isSelected"></td>
-				<td>{{item.productId}}</td>
-				<td>{{item.supplier}}</td>
-				<td>{{item.productName}}</td>
-				<td>{{item.category}}</td>
-				<td>{{item.productInformation}}</td>
-				<td>{{item.quantity}}</td>
-				<td>{{item.price}}</td>
-				<td><input type="button" value="Remove" class="btn btn-danger" ng-click="removeProduct(item.productId)"/> |
-				<input type="button" ng-click="update(i._links.self.href)" class="btn btn-primary"
-					value="Update" /></td>
+				<td>
+					<div ng-hide="editingProduct[item.productId]">{{item.productId}}</div>
+					<div ng-show="editingProduct[item.productId]">
+						<input type="text" ng-model="item.productId" />
+					</div>
+				</td>
+				<td>
+					<div ng-hide="editingProduct[item.productId]">{{item.supplier
+						| uppercase}}</div>
+					<div ng-show="editingProduct[item.productId]">
+						<input type="text" ng-model="item.supplier" />
+					</div>
+				</td>
+				<td>
+					<div ng-hide="editingProduct[item.productId]">{{item.productName
+						| uppercase}}</div>
+					<div ng-show="editingProduct[item.productId]">
+						<input type="text" ng-model="item.productName" />
+					</div>
+				</td>
+				<td>
+					<div ng-hide="editingProduct[item.productId]">{{item.category
+						| uppercase}}</div>
+					<div ng-show="editingProduct[item.productId]">
+						<input type="text" ng-model="item.category" />
+					</div>
+				</td>
+				<td>
+					<div ng-hide="editingProduct[item.productId]">{{item.productInformation
+						| uppercase}}</div>
+					<div ng-show="editingProduct[item.productId]">
+						<textarea ng-model="item.productInformation"></textarea>
+					</div>
+				</td>
+				<td>
+					<div ng-hide="editingProduct[item.productId]">{{item.quantity}}</div>
+					<div ng-show="editingProduct[item.productId]">
+						<textarea ng-model="item.quantity"></textarea>
+					</div>
+				</td>
+				<td>
+					<div ng-hide="editingProduct[item.productId]">{{item.price}}</div>
+					<div ng-show="editingProduct[item.productId]">
+						<textarea ng-model="item.price"></textarea>
+					</div>
+				</td>
+				<td>
+					<button ng-hide="editingProduct[item.productId]"
+						class="btn btn-info" ng-click="modify(item)">Modify</button>
+					<button ng-show="editingProduct[item.productId]"
+						class="btn btn-success" ng-click="update(item.productId,$index)">Update</button> 
+						<button value="delete" class="btn btn-danger"
+					ng-click="deleteProduct(item.productId,item)" >Delete</button>
+				</td>
 			</tr>
 		</table>
 	</div>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script>
-		var app = angular.module('myApp', []);
-		app.controller('productController', function($scope, $http) {
-			$scope.selectedProducts = [];
-			$scope.products={};
+		var app = angular.module("myApp", []);
+		app.controller('productController', function($scope, $http,$timeout) {
+			$scope.X="";
+			$scope.products = {};
 			$http.get("http://localhost:8080/product/productList").then(
 					function(response) {
 						$scope.products = response.data;
@@ -85,41 +143,47 @@ table tr:nth-child(even) {
 			$scope.addProduct = function() {
 				window.location = "addNewProduct.html";
 			};
-			$scope.removeProduct = function(productId){				
-				var index = -1;		
-				var comArr = eval( $scope.products );
-				for( var i = 0; i < comArr.length; i++ ) {
-					if( comArr[i].productId === productId ) {
-						index = i;
-						break;
-					}
-				}
-				if( index === -1 ) {
-					alert( "Something gone wrong" );
-				}
-				$scope.companies.splice( index, 1 );		
-			};
-			$scope.delete=function(n){
-		          $scope.products.splice(n,1);  
-		        };
-			$scope.goToNextPage = function() {
-				angular.forEach($scope.products, function(product) {
-					if (product.isSelected) {
-						$scope.selectedProducts.push(product);
-					}
-				});
-				sessionStorage.setProduct("selectedProducts", JSON
-						.stringify($scope.selectedProducts));
-				// $location.url('example.html');
-				window.location = "confirmOrder.html";
-			}
+			$scope.deleteProduct = function(productId, index){
+				$http.delete('http://localhost:8080/product/delete/' + productId)
+				.success(function(response){
+					$scope.products.splice(index,1); 
+				}).error(function(response){
+					$scope.error_message = response.error_message; 
+					});
+				};
+			/* $scope.updateProduct = function(productId, index){
+				alert(productId+" "+index);
+				$http.put('http://localhost:8080/product/update/' + productId)
+				.success(function(response){
+					alert("updated successfully")
+					$scope.products.push(product);
+				}).error(function(response){
+					$scope.error_message = response.error_message; 
+					});
+				};	 */
+				
+			$scope.editingProduct = {};
+			    
+			    for (var i = 0, length = $scope.products.length; i < length; i++) {
+			      $scope.editingProduct[$scope.products[i].productId] = false;
+			    }
 
+			    $scope.modify = function(item){
+			    $scope.editingProduct[item.productId] = true;
+					};
+			  
+			    $scope.update = function(productId,item){
+			    	$http.put('http://localhost:8080/product/update/' + parseInt(productId), item)
+					.success(function(response){
+						alert("updated successfully")
+						$scope.products.push(item);
+					}).error(function(response){
+						$scope.error_message = response.error_message; 
+						});
+			    };		
 		});
-		
-		
 	</script>
 	<div align="right">
 		<button class="button" ng-click="goToNextPage()">ADD TO CART</button>
 	</div>
 </body>
-</html>

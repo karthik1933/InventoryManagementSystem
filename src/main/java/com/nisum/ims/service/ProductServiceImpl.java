@@ -17,7 +17,7 @@ public class ProductServiceImpl implements ProductService {
 	// private static List<Product> products=productRepository.findAll();
 
 	@Override
-	public List<Product> findProductById(String productId) {
+	public List<Product> findProductById(Integer productId) {
 
 		return productRepository.findAll();
 	}
@@ -40,14 +40,13 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void updateProduct(Product product) {
+		System.out.println("Enter into DB"+product.getProductId());
 		productRepository.save(product);
-
 	}
 
 	@Override
-	public void deleteProductById(String productId) {
+	public void deleteProductById(Integer productId) {
 		productRepository.delete(productId);
-
 	}
 
 	@Override

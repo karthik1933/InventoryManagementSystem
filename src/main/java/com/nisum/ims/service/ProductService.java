@@ -6,7 +6,7 @@ import com.nisum.ims.entity.Product;
 
 public interface ProductService {
 
-	List<Product> findProductById(String productId);
+	List<Product> findProductById(Integer productId);
 
 	Product findByProductName(String productName);
 
@@ -14,7 +14,7 @@ public interface ProductService {
 
 	void updateProduct(Product product);
 
-	void deleteProductById(String productId);
+	void deleteProductById(Integer productId);
 
 	List<Product> findAllProducts();
 
