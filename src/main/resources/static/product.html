@@ -21,7 +21,7 @@ body {
 	cursor: pointer;
 }
 
-table, th, td {
+ table, th, td {
 	border: 1px solid grey;
 	border-collapse: collapse;
 	padding: 5px;
@@ -35,6 +35,12 @@ table tr:nth-child(even) {
 	background-color: #ffffff;
 }
 
+input
+    {
+      width: 90px;
+      vertical-align: middle;
+    }
+
 select {
 	text-indent: 5px;
 	text-align: center;
@@ -43,31 +49,40 @@ select {
 </head>
 <body>
 	<div ng-app="myApp" ng-controller="productController">
+		<center>
+			<h3 style="color: green; text-align: center">MANAGE PRODUCTS</h3>
+		</center>
 		<br>
-		<button type="button" class="btn btn-primary center-block"
-			ng-click="addProduct()">Add New Product</button>
-		<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select
-		Sort Option Field: <select ng-model="X" class="day">
-			<option>productId</option>
-			<option>supplier</option>
-			<option>productName</option>
-			<option>category</option>
-			<option>productInformation</option>
-			<option>quantity</option>
-			<option>price</option>
-		</select><br> <br>
+		<table style="margin-left: 190px;">
+			<tr>
+				<td>Select Sort Option Field: <select ng-model="X" class="day">
+						<option>productId</option>
+						<option>supplier</option>
+						<option>productName</option>
+						<option>category</option>
+						<option>productInformation</option>
+						<option>quantity</option>
+						<option>price</option>
+						<option>createdDate</option>
+				</select>
+				</td>
+				<td>
+					<button type="button" class="btn btn-primary center-block"
+						ng-click="addProduct()">Add New Product</button>
+				</td>
+			</tr>
+		</table><br>
 		<table align="center" style="border-color: #efeded">
 			<tr>
-				<th>S.NO</th>
+				<th >S.NO</th>
 				<th>PRODUCTID</th>
 				<th>SUPPLIER</th>
-				<th>PRODUCTNAME</th>
+				<th>PRODUCT<br>NAME</th>
 				<th>CATEGORY</th>
-				<th>PRODUCTINFORMATION</th>
+				<th>PRODUCT<br>INFO</th>
 				<th>QUANTITY</th>
 				<th>PRICE</th>
+				<th>CREATED<br>DATE</th>
 				<th>ACTION</th>
 			</tr>
 			<tr ng-repeat="item in products | orderBy:X">
@@ -103,39 +118,52 @@ select {
 					<div ng-hide="editingProduct[item.productId]">{{item.productInformation
 						| uppercase}}</div>
 					<div ng-show="editingProduct[item.productId]">
-						<textarea ng-model="item.productInformation"></textarea>
+						<input type="text" ng-model="item.productInformation" />
 					</div>
 				</td>
 				<td>
 					<div ng-hide="editingProduct[item.productId]">{{item.quantity}}</div>
 					<div ng-show="editingProduct[item.productId]">
-						<textarea ng-model="item.quantity"></textarea>
+						<input type="text" ng-model="item.quantity" />
 					</div>
 				</td>
 				<td>
 					<div ng-hide="editingProduct[item.productId]">{{item.price}}</div>
 					<div ng-show="editingProduct[item.productId]">
-						<textarea ng-model="item.price"></textarea>
+						<input type="text" ng-model="item.price" />
+					</div>
+				</td>
+				<td>
+					<div ng-hide="editingProduct[item.createdDate]">{{item.createdDate
+						| date }}</div>
+					<div ng-show="editingProduct[item.createdDate]">
+						<input type="text" ng-model="item.createdDate" />
 					</div>
 				</td>
 				<td>
 					<button ng-hide="editingProduct[item.productId]"
 						class="btn btn-info" ng-click="modify(item)">Modify</button>
 					<button ng-show="editingProduct[item.productId]"
-						class="btn btn-success" ng-click="update(item.productId,$index)">Update</button> 
-						<button value="delete" class="btn btn-danger"
-					ng-click="deleteProduct(item.productId,item)" >Delete</button>
+						class="btn btn-success" ng-click="update(item.productId,item)">Update</button>
+					<button value="delete" class="btn btn-danger"
+						ng-click="deleteProduct(item.productId,$index)">Delete</button>
 				</td>
 			</tr>
 		</table>
+		<br>
+		<div align="center">
+			<button class="button" ng-click="proceedOrder()">Proceed To
+				Order</button>
+		</div>
 	</div>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script>
 		var app = angular.module("myApp", []);
-		app.controller('productController', function($scope, $http,$timeout) {
+		app.controller('productController', function($scope, $http,$window) {
 			$scope.X="";
 			$scope.products = {};
+			$scope.selectedProducts = [];
 			$http.get("http://localhost:8080/product/productList").then(
 					function(response) {
 						$scope.products = response.data;
@@ -151,39 +179,36 @@ select {
 					$scope.error_message = response.error_message; 
 					});
 				};
-			/* $scope.updateProduct = function(productId, index){
-				alert(productId+" "+index);
-				$http.put('http://localhost:8080/product/update/' + productId)
-				.success(function(response){
-					alert("updated successfully")
-					$scope.products.push(product);
-				}).error(function(response){
-					$scope.error_message = response.error_message; 
-					});
-				};	 */
-				
 			$scope.editingProduct = {};
 			    
 			    for (var i = 0, length = $scope.products.length; i < length; i++) {
 			      $scope.editingProduct[$scope.products[i].productId] = false;
 			    }
 
-			    $scope.modify = function(item){
+			$scope.modify = function(item){
 			    $scope.editingProduct[item.productId] = true;
-					};
+				};
 			  
-			    $scope.update = function(productId,item){
-			    	$http.put('http://localhost:8080/product/update/' + parseInt(productId), item)
-					.success(function(response){
-						alert("updated successfully")
-						$scope.products.push(item);
-					}).error(function(response){
-						$scope.error_message = response.error_message; 
-						});
-			    };		
+			$scope.update = function(productId,item){
+		    	$http.put('http://localhost:8080/product/update/' + parseInt(productId), item)
+				.success(function(response){
+					$window.location.href='/product.html';
+				}).error(function(response){
+					$scope.error_message = response.error_message; 
+					});
+			    };	
+			    
+			$scope.proceedOrder = function(){
+				alert("welcome")
+		    	angular.forEach($scope.products, function(item) {
+		    		if(name.isSelected) {
+		    			$scope.selectedProduct.push(item);
+		    		}
+			    });
+			    sessionStorage.setItem("SelectedProduct", JSON.stringify($scope.selectedProduct));
+		    		window.location = "order.html";
+		    };
 		});
 	</script>
-	<div align="right">
-		<button class="button" ng-click="goToNextPage()">ADD TO CART</button>
-	</div>
+
 </body>

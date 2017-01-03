@@ -1,5 +1,7 @@
 package com.nisum.ims.entity;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,7 @@ public class Product {
 	private String productInformation;
 	private Integer quantity;
 	private Integer price;
+	private Date createdDate;
 
 	public Integer getProductId() {
 		return productId;
@@ -69,6 +72,14 @@ public class Product {
 
 	public void setPrice(Integer price) {
 		this.price = price;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 }

@@ -56,7 +56,6 @@ public class ProductController {
 
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
 	public void updateProduct(@PathVariable("id") Integer id, @RequestBody Product product) {
-		System.out.println("Enter into controller"+id);
 		productService.updateProduct(product);
 	}
 

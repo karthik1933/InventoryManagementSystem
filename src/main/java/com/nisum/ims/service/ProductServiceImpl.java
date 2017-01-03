@@ -40,7 +40,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void updateProduct(Product product) {
-		System.out.println("Enter into DB"+product.getProductId());
 		productRepository.save(product);
 	}
 
