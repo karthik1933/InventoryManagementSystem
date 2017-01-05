@@ -5,13 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Add New product</title>
 <link href="css/bootstrap.min.css" rel="stylesheet" />
-<!-- Latest compiled JavaScript -->
-<script
-	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<style>
+input {
+	font-family: Gill Sans, Verdana;
+	font-size: 11px;
+}
+span {
+	font-family: Gill Sans, Verdana;
+	font-size: 11px;
+	color:#fdd3ce;
+}
+</style>
+<script	src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
 <script type="text/javascript">
 angular.module('productervice',[]).factory('productFactory',function($http,$window){
 	return{
@@ -26,7 +34,7 @@ angular.module('productervice',[]).factory('productFactory',function($http,$wind
 		},
 	}
 });
-var app = angular.module("myApp", [ 'productervice' ]);
+var app = angular.module("myApp", [ 'productervice']);
 app.controller('myCtrl',function($scope, $http, productFactory) {
 	
 					//for validating the form before submitting
@@ -59,7 +67,7 @@ app.controller('myCtrl',function($scope, $http, productFactory) {
 				<div class="col-sm-4">
 					<input class="form-control"  name="productId" placeholder="Product Id"
 						ng-pattern="onlyNumbers" ng-model="product.productId"  type="number"  required>
-						<span ng-show="(productForm.productId.$dirty || !productForm.productId.length || isValid) && productForm.productId.$error.required">
+						<span ng-show="(productForm.productId.$dirty || !productForm.productId.length || isValid) && productForm.productId.$error.required" >
      						 Product ID is required
     					</span>
 				</div>

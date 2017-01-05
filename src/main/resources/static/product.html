@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	
 <style>
 body {
 	
@@ -37,7 +37,7 @@ table tr:nth-child(even) {
 
 input
     {
-      width: 90px;
+      width: 70px;
       vertical-align: middle;
     }
 
@@ -45,6 +45,11 @@ select {
 	text-indent: 5px;
 	text-align: center;
 }
+.ng-hide{
+ transition:3s;
+ background-color:green
+}
+
 </style>
 </head>
 <body>
@@ -53,7 +58,7 @@ select {
 			<h3 style="color: green; text-align: center">MANAGE PRODUCTS</h3>
 		</center>
 		<br>
-		<table style="margin-left: 190px;">
+		<table style="margin-left: 146px;">
 			<tr>
 				<td>Select Sort Option Field: <select ng-model="X" class="day">
 						<option>productId</option>
@@ -70,6 +75,14 @@ select {
 					<button type="button" class="btn btn-primary center-block"
 						ng-click="addProduct()">Add New Product</button>
 				</td>
+				<td>
+					<button type="button" class="btn btn-primary center-block"
+						ng-click="addSupplier()">Add New Supplier</button>
+				</td>
+				<td>
+					<button type="button" class="btn btn-primary center-block"
+						ng-click="addCategory()">Add New Category</button>
+				</td>
 			</tr>
 		</table><br>
 		<table align="center" style="border-color: #efeded">
@@ -77,12 +90,12 @@ select {
 				<th >S.NO</th>
 				<th>PRODUCTID</th>
 				<th>SUPPLIER</th>
-				<th>PRODUCT<br>NAME</th>
+				<th>PRODUCTNAME</th>
 				<th>CATEGORY</th>
-				<th>PRODUCT<br>INFO</th>
+				<th>PRODUCTINFO</th>
 				<th>QUANTITY</th>
 				<th>PRICE</th>
-				<th>CREATED<br>DATE</th>
+				<th>CREATEDDATE</th>
 				<th>ACTION</th>
 			</tr>
 			<tr ng-repeat="item in products | orderBy:X">
@@ -158,8 +171,9 @@ select {
 	</div>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"> </script>
 	<script>
-		var app = angular.module("myApp", []);
+		var app = angular.module("myApp", ['ngAnimate']);
 		app.controller('productController', function($scope, $http,$window) {
 			$scope.X="";
 			$scope.products = {};
@@ -170,6 +184,12 @@ select {
 					});
 			$scope.addProduct = function() {
 				window.location = "addNewProduct.html";
+			};
+			$scope.addSupplier = function() {
+				window.location = "addNewSupplier.html";
+			};
+			$scope.addCategory = function() {
+				window.location = "addNewCategory.html";
 			};
 			$scope.deleteProduct = function(productId, index){
 				$http.delete('http://localhost:8080/product/delete/' + productId)
